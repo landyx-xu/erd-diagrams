@@ -1,0 +1,27 @@
+flowchart LR
+    subgraph BE["Backend"]
+        direction TB
+        F["Roulette Flag<br/>membership_partner_benefits_ios_only<br/>ios=true · web/android=false"]:::new
+        TPR["Trial / Paid (D2P) Resolvers<br/>append 2 rows + ctaAction"]:::new
+        F -.gates.-> TPR
+    end
+    subgraph FE["Frontend (webview)"]
+        direction TB
+        EV["ExpressValueProps.tsx<br/>renders rows + Learn more CTA"]:::new
+    end
+    subgraph IOS["iOS Native Bridge"]
+        direction TB
+        BR["OpenUrlEvent handler<br/>proto event"]:::existing
+        UR["URLOpener.open url"]:::existing
+        SF["External Safari<br/>Partner Landing Page<br/>Partnership Marketing owns"]:::external
+        BR --> UR --> SF
+    end
+    TPR -->|"GraphQL: rows + ctaAction"| EV
+    EV -->|"OpenUrlEvent url · on tap"| BR
+    SF -.->|"instacart:// deep link<br/>returns to origin modal"| RETURN["Back to Instacart app"]:::existing
+    LG1[/"NEW code"/]:::new
+    LG2[/"EXISTING · no change"/]:::existing
+    LG3[/"EXTERNAL system"/]:::external
+    classDef new fill:#fff4e6,stroke:#e67700,stroke-width:2px,color:#000
+    classDef existing fill:#e7f5ff,stroke:#1971c2,stroke-width:1px,color:#000
+    classDef external fill:#f3f0ff,stroke:#6741d9,stroke-width:1px,stroke-dasharray:5,color:#000

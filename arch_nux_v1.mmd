@@ -1,0 +1,20 @@
+flowchart LR
+    subgraph BE["Backend"]
+        direction TB
+        F["Roulette Flag<br/>membership_partner_benefits_ios_only<br/>same flag, NUX branch"]:::new
+        NR["NUX Resolver<br/>append 2 rows · ctaAction = nil"]:::new
+        F -.gates.-> NR
+    end
+    subgraph NATIVE["iOS Native (NUX path)"]
+        direction TB
+        NV["NUX Native Row View<br/>renders rows · no CTA slot exists"]:::existing
+    end
+    NR -->|"GraphQL: rows only · no CTA"| NV
+    NOTE["No webview · no proto bridge · no Safari hop<br/>Native NUX path is retiring — adding Swift CTA would be throwaway"]:::external
+    NV -.-> NOTE
+    LG1[/"NEW code"/]:::new
+    LG2[/"EXISTING · no change"/]:::existing
+    LG3[/"design note"/]:::external
+    classDef new fill:#fff4e6,stroke:#e67700,stroke-width:2px,color:#000
+    classDef existing fill:#e7f5ff,stroke:#1971c2,stroke-width:1px,color:#000
+    classDef external fill:#f3f0ff,stroke:#6741d9,stroke-width:1px,stroke-dasharray:5,color:#000
