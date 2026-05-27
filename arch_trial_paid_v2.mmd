@@ -1,0 +1,20 @@
+%%{init: {'theme':'default', 'themeVariables': {'fontSize':'18px', 'primaryTextColor':'#000'}, 'flowchart': {'nodeSpacing': 40, 'rankSpacing': 50}}}%%
+flowchart TB
+    F["Roulette Flag<br/>membership_partner_benefits_ios_only<br/>ios=true · web/android=false"]:::new
+    TPR["Trial / Paid (D2P) Resolvers<br/>append 2 rows + ctaAction + UTM-encoded URL"]:::new
+    EV["ExpressValueProps.tsx (webview)<br/>renders rows + Learn more CTA<br/>fires rendered + learn_more_clicked events"]:::new
+    BR["iOS Proto Bridge<br/>OpenUrlEvent handler"]:::existing
+    UR["URLOpener.open(url)<br/>(native iOS)"]:::existing
+    SF["External Safari<br/>Partner Landing Page<br/>Partnership Marketing owns"]:::external
+    RETURN["Back to Instacart app<br/>(original sign-up modal)"]:::existing
+
+    F -. gates .-> TPR
+    TPR -->|"GraphQL: rows + ctaAction"| EV
+    EV -->|"on tap: OpenUrlEvent(url)"| BR
+    BR --> UR
+    UR --> SF
+    SF -.->|"instacart:// deep link"| RETURN
+
+    classDef new fill:#fff4e6,stroke:#e67700,stroke-width:3px,color:#000
+    classDef existing fill:#e7f5ff,stroke:#1971c2,stroke-width:2px,color:#000
+    classDef external fill:#f3f0ff,stroke:#6741d9,stroke-width:2px,stroke-dasharray:5,color:#000

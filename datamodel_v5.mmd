@@ -1,0 +1,16 @@
+%%{init: {'theme':'default', 'themeVariables': {'fontSize':'18px', 'primaryTextColor':'#000'}, 'flowchart': {'nodeSpacing': 40, 'rankSpacing': 50}}}%%
+flowchart TB
+    R1["Entertainment Access · Peacock<br/>ValuePropType: ENTERTAINMENT<br/>CTA on Trial/Paid only"]:::new
+    R2["Premium Recipes · NYT Cooking<br/>ValuePropType: RECIPES<br/>CTA on Trial/Paid only"]:::new
+    VPS["ValuePropSection (GraphQL)<br/>existing: iconImage · text · subtext<br/>NEW nullable: ctaStringFormatted · ctaAction"]:::new
+    NAV["NavigateToExternalUrl<br/>url · openInBrowser · tracking<br/>existing — reused as-is"]:::existing
+    DBN[("Database · NO CHANGES<br/>rows are computed at request time<br/>nothing persisted · no migrations")]:::existing
+
+    R1 -.->|"instance of"| VPS
+    R2 -.->|"instance of"| VPS
+    VPS -->|"ctaAction (nullable)"| NAV
+    VPS -. no-op .-> DBN
+
+    classDef new fill:#fff4e6,stroke:#e67700,stroke-width:3px,color:#000
+    classDef existing fill:#e7f5ff,stroke:#1971c2,stroke-width:2px,color:#000
+    classDef external fill:#f3f0ff,stroke:#6741d9,stroke-width:2px,stroke-dasharray:5,color:#000
